@@ -29,7 +29,11 @@ def predict(signal_history, verbose = False, autocorr_type=0):
     autocorr = np.array(map(corr,tau))
     autocorr_matrix = build_matrix(autocorr[:-1])
     autocorr = autocorr[1:]
-    autocorr_matrix_inv = np.linalg.inv(autocorr_matrix)
+    try:
+    	autocorr_matrix_inv = np.linalg.inv(autocorr_matrix)
+    except np.linalg.LinAlgError:
+    	return 0
+    	
     w = autocorr_matrix_inv.dot(autocorr)
     prediction = np.sum(signal_history_rev * w)
     
